@@ -1,1 +1,15 @@
-
+{
+  "version": 1,
+  "builds": [
+      {
+          "src": "*.py",
+          "use": "@alamsoftwares"
+      }
+  ],
+  "routes": [
+      {
+          "src": "(.*)",
+          "dest": "main.py"
+      }
+  ]
+}
