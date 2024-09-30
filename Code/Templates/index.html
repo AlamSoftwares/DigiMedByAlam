@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>DigiMed-Python By Md Mahir Alam</title>
+    <link rel="stylesheet" href="static/style.css">
+</head>
+
+<body>
+    <nav id="nav-bar">DigiMed-Python By Md Mahir Alam</nav>
+    <section id="body">
+
+        <form action="/" method="POST" id="form_">
+            <input placeholder="Enter The Patient's Name" type="text" name="patient_name" id="patient_name" required>
+            <div id="form_content"></div>
+        </form>
+        <hr>
+        <div class="result">
+            <u>Results:</u>
+            <p id="res">Patient's Name: {{name}}</p>
+            <p>Random Forest Classifier Found:{{res_RFC}},<br>
+                Naives Bayes Found: {{res_NB}},<br>
+                SVC Found: {{res_SVM}},<br>
+                Thus You Might Have: {{fin}}, <br><br>
+                <i><strong>GET WELL SOON!!</strong></i>
+            </p>
+        </div>
+    </section>
+</body>
+<script>
+    let val = []
+    fetch('/static/Input.txt')
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('File not found');
+            }
+            return response.text();  // Read the file content as text
+        })
+        .then(text => {
+            val = text.split(",");
+            let sym = []
+
+            //Display Checkboxes Labels In a User-Readable way
+            val.forEach(symptom => {
+                let formattedSymptom = symptom.split("_").map(part => part.charAt(0).toUpperCase() + part.slice(1)) // Capitalize each part
+                    .join(" "); // Join with spaces
+
+                // Append the formatted symptom to the new array
+                sym.push(formattedSymptom);
+            });
+            //Display Checkboxes for Options
+            for (let i = 0; i < 132; i++) {
+                document.getElementById('form_content').innerHTML += `
+                                                        <input id="${val[i]}" class="choice_symptoms" type="checkbox" value="${val[i]}" name="sympt"}">
+                                                        <label for="${val[i]}">${sym[i]}</label><br><br>
+                                                        `
+            }
+            //Define Submit Button
+            document.getElementById('form_').innerHTML += `<input type="Submit" id="Submit" class="btns" href="#result"></input>`
+            //Append Patients Name To Results Box
+            document.getElementById('Submit').addEventListener("click", () => {
+                document.getElementById("res").innerHTML += "Patient's Name: " + document.getElementById("patient_name").value
+            })
+        })
+        .catch(error => {
+            console.error('Error fetching the file:', error);
+        });
+
+</script>
+
+</html>
